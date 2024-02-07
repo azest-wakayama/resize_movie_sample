@@ -5,8 +5,8 @@ FROM amazonlinux:2
 RUN yum -y update && \
     yum -y install httpd
 
-# 追加のパッケージのインストール
-RUN yum -y install epel-release && \
+# EPELリポジトリを追加し、追加のパッケージをインストール
+RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
     yum -y install ffmpeg python3
 
 # Pythonのパッケージ管理ツールpipのインストール
