@@ -4,8 +4,8 @@ import sys
 
 # ファイルパスと圧縮後のファイルパス
 file_path = sys.argv[1]  # ファイルパスは第1引数として受け取る
-file_path = "input.mp4"
-compression_file_path = "output_compressed.mp4"
+# file_path = "input.mp4"
+compression_file_path = "./output/output_compressed.mp4"
 
 # 幅と高さ
 w = 1280
@@ -19,3 +19,4 @@ subprocess.run(ffmpeg_cmd, shell=True)
 
 
 # 実行時下記のコマンドを実行すると.pyファイルが実行されるはず
+# python resize_movie_sample.py ./input/横長動画サンプル.mp4
