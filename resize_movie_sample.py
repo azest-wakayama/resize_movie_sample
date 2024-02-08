@@ -14,13 +14,24 @@ def get_video_sizes(file_path):
             return width, height
     return None, None
 
+# 最大公約数を求める
+def gcb(width, height):
+    while height:
+        width, height = height, width % height
+    return width
+
+#　アスペクト比を求める 横/最大公約数 : 縦/最大公約数
+def calculation_aspect_ratio(width, height):
+
+
 file_path = sys.argv[1]
 print(file_path)
 width, height = get_video_sizes(file_path)
 print('縦:', height)
 print('横:', width)
 
-
+gcb = gcb(width, height)
+print('最大公約数', gcb)
 
 
 
