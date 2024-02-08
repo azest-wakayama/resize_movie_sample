@@ -1,21 +1,18 @@
-# イメージ
-FROM amazonlinux:2
+# ベースイメージを指定
+FROM ubuntu:latest
 
-# 基本的なパッケージの更新とApacheのインストール
-RUN yum -y update && \
-    yum -y install httpd
+# 必要なパッケージをインストール
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    ffmpeg \
+    apache2
 
-# EPELリポジトリを追加し、追加のパッケージをインストール
-RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
-    yum -y install ffmpeg python3
+# デフォルトのPythonをPython 3に設定
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
-# Pythonのパッケージ管理ツールpipのインストール
-RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
-    python3 get-pip.py && \
-    rm get-pip.py
+# 作業ディレクトリを設定
+WORKDIR /app
 
-# 必要なPythonパッケージのインストール
-RUN pip install numpy scipy matplotlib
-
-# コンテナが起動したときに実行するコマンドを指定します（オプション）
-CMD ["httpd", "-D", "FOREGROUND"]
+# Dockerコンテナが起動した際に実行されるコマンドを設定
+CMD ["apache2ctl", "-D", "FOREGROUND"]
