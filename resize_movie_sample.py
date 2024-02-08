@@ -22,6 +22,11 @@ def gcb(width, height):
 
 #　アスペクト比を求める 横/最大公約数 : 縦/最大公約数
 def calculation_aspect_ratio(width, height):
+    gcb_value = gcb(width, height)
+    ratio_w = width / gcb_value
+    ratio_h = height / gcb_value
+    return ratio_w, ratio_h
+
 
 
 file_path = sys.argv[1]
@@ -30,8 +35,9 @@ width, height = get_video_sizes(file_path)
 print('縦:', height)
 print('横:', width)
 
-gcb = gcb(width, height)
-print('最大公約数', gcb)
+ratio_w, ratio_h = calculation_aspect_ratio(width,height)
+print("Ratio Width:", ratio_w)
+print("Ratio Height:", ratio_h)
 
 
 
