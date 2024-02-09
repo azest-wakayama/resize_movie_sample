@@ -2,20 +2,7 @@ import subprocess
 import sys
 import re
 
-# compression_file_path = "./output/output_compressed.mp4"
-# def get_video_sizes(file_path):
-#     input_ffmpeg_cmd = ['ffmpeg', '-i', file_path]  # 例としてFFmpegコマンドをリスト形式で渡す
-#     result = subprocess.run(input_ffmpeg_cmd, capture_output=True, text=True)
-#     output = result.stderr
-#     lines = output.split('\n')
-#     for line in lines:
-#         print(line)
-#             match = re.search(r'(\d+)x(\d+)', line)
-#             if match:
-#                 width = int(match.group(1))
-#                 height = int(match.group(2))
-#                 return width, height
-#     return None, None
+compression_file_path = "./output/output_compressed.mp4"
 
 def get_video_sizes(file_path):
     input_ffmpeg_cmd = ['ffmpeg', '-i', file_path]
@@ -24,7 +11,6 @@ def get_video_sizes(file_path):
     lines = output.split('\n')
     for line in lines:
         if 'Stream #0:0' in line:
-            # print(line)
             matches = re.search(r'(\d{3,4})x(\d{3,4})', line)
             if matches:
                 width = int(matches.group(1))
@@ -46,6 +32,26 @@ def calculation_aspect_ratio(width, height):
     ratio_h = height / gcb_value
     return ratio_w, ratio_h
 
+def resize_movie_sample(file_path):
+  movie_width, movie_height = get_video_sizes(file_path)
+  ratio_w, ratio_h = calculation_aspect_ratio(movie_width, height)
+  aspect_ratio = ratio_w / ratio_h
+#　横1920、縦1080以下の場合はそのままのサイズで返す
+  if movie_width <= 1920 and movie_height <= 1080:
+    return movie_width, movie_height
+# 縦長動画の場合
+  elif movie_width <= movie_height:     
+     resize_height = 1080
+     resize_width = resize_height * aspect_ratio
+     return resize_width ,resize_height
+  else:
+      resize_width = 1920
+      resize_height = resize_width * aspect_ratio
+      return resize_width ,resize_height
+     
+
+#   ratio_w, ratio_h = calculation_aspect_ratio(movie_width, movie_height)
+  
 
 
 file_path = sys.argv[1]
@@ -54,38 +60,20 @@ width, height = get_video_sizes(file_path)
 print('縦:', height)
 print('横:', width)
 
-# ratio_w, ratio_h = calculation_aspect_ratio(width,height)
-# print("Ratio Width:", ratio_w)
-# print("Ratio Height:", ratio_h)
+ratio_w, ratio_h = calculation_aspect_ratio(width,height)
+print("Ratio Width:", ratio_w)
+print("Ratio Height:", ratio_h)
 
-
-
-
-
-# input_ffmpeg_cmd = ['ffmpeg', '-i', file_path]
-# try:
-#     result = subprocess.run(input_ffmpeg_cmd, capture_output=True, text=True)
-#     output = result.stderr
-#     lines = output.split('\n')
-#     for line in lines:
-#         if 'Stream #0:0' in line:
-#             tokens = line.split(',')[2].strip().split()[0]
-#             width, height = map(int, tokens.split('x'))
-#             print('縦:',height)
-#             print('横:',width)
-#             break
-# except Exception as e:
-#     print("エラー:", e)
 
 # # 幅と高さ
 # w = 800
 # h = 720
 
 # # ffmpegコマンドの作成
-# ffmpeg_cmd = f'ffmpeg -i {file_path} -vcodec libx264 -vb 2000k -s {w}x{h} -acodec aac -ab 64k -aac_coder twoloop -pix_fmt yuv420p -movflags +faststart {compression_file_path}'
+ffmpeg_cmd = f'ffmpeg -i {file_path} -vcodec libx264 -vb 2000k -s {w}x{h} -acodec aac -ab 64k -aac_coder twoloop -pix_fmt yuv420p -movflags +faststart {compression_file_path}'
 
-# # ffmpegコマンドの実行
-# subprocess.run(ffmpeg_cmd, shell=True)
+# ffmpegコマンドの実行
+subprocess.run(ffmpeg_cmd, shell=True)
 
 
 # 実行時下記のコマンドを実行すると.pyファイルが実行されるはず
