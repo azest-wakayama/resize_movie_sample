@@ -7,27 +7,26 @@ def resize_movie(file_path):
   movie_width, movie_height = get_video_sizes(file_path)
   ratio_w, ratio_h = calculation_aspect_ratio(movie_width, movie_height)
   aspect_ratio = ratio_w / ratio_h  # 初期のアスペクト比を計算
+  MAX_WIDTH = 1920
+  MAX_HEIGHT = 1080
 
 #　横1920、縦1080以下の場合はそのままのサイズで返す
-  if movie_width <= 1920 and movie_height <= 1080:
+  if movie_width <= MAX_WIDTH and movie_height <= MAX_HEIGHT:
     aspect_ratio = ratio_w / ratio_h
     return movie_width, movie_height
 # 縦長動画の場合
   elif movie_width <= movie_height:     
-     resize_height = 1080
-     resize_width = resize_height * aspect_ratio
-     return resize_width ,resize_height
+     resize_width = MAX_HEIGHT * aspect_ratio
+     return resize_width ,MAX_HEIGHT
   else:
-      resize_width = 1920
-      resize_height = resize_width / aspect_ratio
-      if resize_height < 1080:
-        return resize_width, resize_height
+      resize_height = MAX_WIDTH / aspect_ratio
+      if resize_height < MAX_HEIGHT:
+        return MAX_WIDTH, resize_height
       else:
-        while resize_height >= 1080:
-            resize_width -= 1
-            print(resize_width)
-            resize_height = resize_width / aspect_ratio
-        return resize_width, resize_height
+        while resize_height >= MAX_HEIGHT:
+            MAX_WIDTH -= 1
+            resize_height = MAX_WIDTH / aspect_ratio
+        return MAX_WIDTH, resize_height
 
 # ビデオサイズを取得する
 def get_video_sizes(file_path):
@@ -81,4 +80,4 @@ subprocess.run(ffmpeg_cmd, shell=True)
 
 
 # 実行時下記のコマンドを実行すると.pyファイルが実行されるはず
-# python resize_movie_sample.py ./input/2400_1350_.mp4
+# python resize_movie_sample.py ./input/1080_608_.mp4
