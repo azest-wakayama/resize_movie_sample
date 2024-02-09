@@ -1,18 +1,37 @@
 import subprocess
 import sys
+import re
 
 # compression_file_path = "./output/output_compressed.mp4"
+# def get_video_sizes(file_path):
+#     input_ffmpeg_cmd = ['ffmpeg', '-i', file_path]  # 例としてFFmpegコマンドをリスト形式で渡す
+#     result = subprocess.run(input_ffmpeg_cmd, capture_output=True, text=True)
+#     output = result.stderr
+#     lines = output.split('\n')
+#     for line in lines:
+#         print(line)
+#             match = re.search(r'(\d+)x(\d+)', line)
+#             if match:
+#                 width = int(match.group(1))
+#                 height = int(match.group(2))
+#                 return width, height
+#     return None, None
+
 def get_video_sizes(file_path):
-    input_ffmpeg_cmd = ['ffmpeg', '-i', file_path]  # 例としてFFmpegコマンドをリスト形式で渡す
+    input_ffmpeg_cmd = ['ffmpeg', '-i', file_path]
     result = subprocess.run(input_ffmpeg_cmd, capture_output=True, text=True)
     output = result.stderr
     lines = output.split('\n')
     for line in lines:
         if 'Stream #0:0' in line:
-            tokens = line.split(',')[2].strip().split()[0]
-            width, height = map(int, tokens.split('x'))
-            return width, height
+            # print(line)
+            matches = re.search(r'(\d{3,4})x(\d{3,4})', line)
+            if matches:
+                width = int(matches.group(1))
+                height = int(matches.group(2))
+                return width, height
     return None, None
+
 
 # 最大公約数を求める
 def gcb(width, height):
@@ -30,14 +49,14 @@ def calculation_aspect_ratio(width, height):
 
 
 file_path = sys.argv[1]
-print(file_path)
+# print(file_path)
 width, height = get_video_sizes(file_path)
 print('縦:', height)
 print('横:', width)
 
-ratio_w, ratio_h = calculation_aspect_ratio(width,height)
-print("Ratio Width:", ratio_w)
-print("Ratio Height:", ratio_h)
+# ratio_w, ratio_h = calculation_aspect_ratio(width,height)
+# print("Ratio Width:", ratio_w)
+# print("Ratio Height:", ratio_h)
 
 
 
