@@ -2,10 +2,10 @@ import subprocess
 import sys
 import re
 
-
-def resize_movie_sample(file_path):
+# 圧縮用にサイズをアスペクト比に合わせてサイズ変更
+def resize_movie(file_path):
   movie_width, movie_height = get_video_sizes(file_path)
-  ratio_w, ratio_h = calculation_aspect_ratio(movie_width, height)
+  ratio_w, ratio_h = calculation_aspect_ratio(movie_width, movie_height)
   aspect_ratio = ratio_w / ratio_h
 #　横1920、縦1080以下の場合はそのままのサイズで返す
   if movie_width <= 1920 and movie_height <= 1080:
@@ -20,6 +20,7 @@ def resize_movie_sample(file_path):
       resize_height = resize_width * aspect_ratio
       return resize_width ,resize_height
 
+# ビデオサイズを取得する
 def get_video_sizes(file_path):
     input_ffmpeg_cmd = ['ffmpeg', '-i', file_path]
     result = subprocess.run(input_ffmpeg_cmd, capture_output=True, text=True)
@@ -52,30 +53,22 @@ def calculation_aspect_ratio(width, height):
      
 
 #   ratio_w, ratio_h = calculation_aspect_ratio(movie_width, movie_height)
-  
-
 
 file_path = sys.argv[1]
-# print(file_path)
-width, height = get_video_sizes(file_path)
-print('縦:', height)
-print('横:', width)
+resize_width, resize_height = resize_movie(file_path)
 
-ratio_w, ratio_h = calculation_aspect_ratio(width,height)
-print("Ratio Width:", ratio_w)
-print("Ratio Height:", ratio_h)
-
-
+print('幅',resize_width)
+print('高さ',resize_height)
 # # 幅と高さ
 # w = 800
 # h = 720
 
 # # ffmpegコマンドの作成
-compression_file_path = "./output/output_compressed.mp4"
-ffmpeg_cmd = f'ffmpeg -i {file_path} -vcodec libx264 -vb 2000k -s {w}x{h} -acodec aac -ab 64k -aac_coder twoloop -pix_fmt yuv420p -movflags +faststart {compression_file_path}'
+# compression_file_path = "./output/output_compressed.mp4"
+# ffmpeg_cmd = f'ffmpeg -i {file_path} -vcodec libx264 -vb 2000k -s {w}x{h} -acodec aac -ab 64k -aac_coder twoloop -pix_fmt yuv420p -movflags +faststart {compression_file_path}'
 
-# ffmpegコマンドの実行
-subprocess.run(ffmpeg_cmd, shell=True)
+# # ffmpegコマンドの実行
+# subprocess.run(ffmpeg_cmd, shell=True)
 
 
 # 実行時下記のコマンドを実行すると.pyファイルが実行されるはず
