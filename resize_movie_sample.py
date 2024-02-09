@@ -23,6 +23,7 @@ def resize_movie(file_path):
       if resize_height < MAX_HEIGHT:
         return MAX_WIDTH, resize_height
       else:
+        # リサイズ後の高さ1080以上の場合、高さ1080になる幅を計算
         while resize_height >= MAX_HEIGHT:
             MAX_WIDTH -= 1
             resize_height = MAX_WIDTH / aspect_ratio
