@@ -57,27 +57,16 @@ def calculation_aspect_ratio(width, height):
     ratio_h = height / gcb_value
     return ratio_w, ratio_h
 
-
-     
-
-#   ratio_w, ratio_h = calculation_aspect_ratio(movie_width, movie_height)
-
 file_path = sys.argv[1]
 resize_width, resize_height = resize_movie(file_path)
 
-print('幅',resize_width)
-print('高さ',resize_height)
-# # 幅と高さ
-# w = 1080
-# h = 608
-
-# # ffmpegコマンドの作成
-# compression_file_path = f"./output/{w}_{h}_.mp4"
-# ffmpeg_cmd = f'ffmpeg -i {file_path} -vcodec libx264 -vb 2000k -s {w}x{h} -acodec aac -ab 64k -aac_coder twoloop -pix_fmt yuv420p -movflags +faststart {compression_file_path}'
+# ffmpegに適したフレームサイズに調整∂ß
+resize_width = (int(resize_width) // 2) * 2
+resize_height = (int(resize_height) // 2) * 2
+print(resize_width)
+print(resize_height)
+compression_file_path = f"./output/{resize_width}_{resize_height}_.mp4"
+ffmpeg_cmd = f'ffmpeg -i {file_path} -vcodec libx264 -vb 2000k -s {resize_width}x{resize_height} -acodec aac -ab 64k -aac_coder twoloop -pix_fmt yuv420p -movflags +faststart {compression_file_path}'
 
 # # ffmpegコマンドの実行
 subprocess.run(ffmpeg_cmd, shell=True)
-
-
-# 実行時下記のコマンドを実行すると.pyファイルが実行されるはず
-# python resize_movie_sample.py ./input/1080_608_.mp4

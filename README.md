@@ -1,10 +1,10 @@
 # readme
 
-# CPUの制限を行い、zip化された複数のファイルをまとめて圧縮する機能
+# 動画をアスペクト比合わせかつ、1920×1080に納め出力
 
 ***
 ## 環境
- - Amazon Linux2
+ - ubuntu20.4
  - Apache2.4
 ***
 
@@ -19,21 +19,13 @@ $ docker ps
 # コンテナ内にログイン
 $ docker exec -it コンテナ名 /bin/bash
 
-# input/logsディレクトリにログを圧縮したいログを配置
+# inputディレクトリに圧縮したい動画を格納
 
-# zip_compression.shの実行
-$ ./zip_compression.sh
+# ffmpegコマンドを実行
+$ python resize_movie_sample.py ./input/縦長動画サンプル.mp4
 
-# outputディレクトリに圧縮されたzipファイルが出力される
+# outputディレクトリにアスペクト比に合わせたリサイズした動画が出力される
 
 # コンテナを停止する
 $ docker compose down
 ~~~
-
-
-# 　CPU Limitのインストールの参考記事
-
-- ▽EPEL レポジトリを有効にするためには
-  - 　https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/add-repositories.html
-- ▽CPU limitの使用方法、導入について
-  - https://ubunlog.com/ja/cpulimit-limita-cpu-proceso/
