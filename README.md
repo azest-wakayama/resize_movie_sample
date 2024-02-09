@@ -6,6 +6,7 @@
 ## 環境
  - ubuntu20.4
  - Apache2.4
+ - Python 3.10
 ***
 
 ## 手順
